@@ -38,20 +38,22 @@
 #include "HCSR04.h"
 #include "HRLV.h"
 
+#include "thermo.h"
+
 // IMPORTANT
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // please uncomment only 1 choice
 //
-#define ETSI_EUROPE_REGULATION
-//#define FCC_US_REGULATION
+//define ETSI_EUROPE_REGULATION
+#define FCC_US_REGULATION
 //#define SENEGAL_REGULATION
 /////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
 // IMPORTANT
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // please uncomment only 1 choice
-#define BAND868
-//#define BAND900
+//#define BAND868
+#define BAND900
 //#define BAND433
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -59,6 +61,8 @@
 #define MAX_DBM 14
 // previous way for setting output power
 // char powerLevel='M';
+#elif defined FCC_US_REGULATION
+#define MAX_DBM 14
 #elif defined SENEGAL_REGULATION
 #define MAX_DBM 10
 // previous way for setting output power
@@ -73,7 +77,7 @@ const uint32_t DEFAULT_CHANNEL=CH_04_868;
 const uint32_t DEFAULT_CHANNEL=CH_10_868;
 #endif
 #elif defined BAND900
-const uint32_t DEFAULT_CHANNEL=CH_05_900;
+const uint32_t DEFAULT_CHANNEL=CH_12_900;
 #elif defined BAND433
 const uint32_t DEFAULT_CHANNEL=CH_00_433;
 #endif
@@ -239,7 +243,7 @@ long getCmdValue(int &i, char* strBuff=NULL) {
 // SENSORS DEFINITION 
 //////////////////////////////////////////////////////////////////
 // CHANGE HERE THE NUMBER OF SENSORS, SOME CAN BE NOT CONNECTED
-const int number_of_sensors = 8;
+const int number_of_sensors = 9;
 //////////////////////////////////////////////////////////////////
 
 // array containing sensors pointers
@@ -278,17 +282,18 @@ void setup()
 //////////////////////////////////////////////////////////////////
 // ADD YOUR SENSORS HERE   
 // Sensor(nomenclature, is_analog, is_connected, is_low_power, pin_read, pin_power, pin_trigger=-1)
-  sensor_ptrs[0] = new LM35("tc", IS_ANALOG, IS_CONNECTED, low_power_status, (uint8_t) A0, (uint8_t) 8);
-  sensor_ptrs[1] = new DHT22_Temperature("TC", IS_NOT_ANALOG, IS_CONNECTED, low_power_status, (uint8_t) 3, (uint8_t) 9);
-  sensor_ptrs[2] = new DHT22_Humidity("HU", IS_NOT_ANALOG, IS_CONNECTED, low_power_status, (uint8_t) 3, (uint8_t) 9);
+  sensor_ptrs[0] = new LM35("tc", IS_ANALOG, IS_NOT_CONNECTED, low_power_status, (uint8_t) A0, (uint8_t) 8);
+  sensor_ptrs[1] = new DHT22_Temperature("TC", IS_NOT_ANALOG, IS_NOT_CONNECTED, low_power_status, (uint8_t) 3, (uint8_t) 9);
+  sensor_ptrs[2] = new DHT22_Humidity("HU", IS_NOT_ANALOG, IS_NOT_CONNECTED, low_power_status, (uint8_t) 3, (uint8_t) 9);
   sensor_ptrs[3] = new LeafWetness("lw", IS_ANALOG, IS_NOT_CONNECTED, low_power_status, (uint8_t) A2, (uint8_t) 7);
   sensor_ptrs[4] = new DS18B20("DS", IS_NOT_ANALOG, IS_CONNECTED, low_power_status, (uint8_t) 4, (uint8_t) 7);
-  sensor_ptrs[5] = new rawAnalog("SH", IS_ANALOG, IS_CONNECTED, low_power_status, (uint8_t) A1, (uint8_t) 6);
-  sensor_ptrs[6] = new HCSR04("DIS", IS_NOT_ANALOG, IS_CONNECTED, low_power_status, (uint8_t) 39, (uint8_t) 41, (uint8_t) 40);
+  sensor_ptrs[5] = new rawAnalog("SH", IS_ANALOG, IS_NOT_CONNECTED, low_power_status, (uint8_t) A1, (uint8_t) 6);
+  sensor_ptrs[6] = new HCSR04("DIS", IS_NOT_ANALOG, IS_NOT_CONNECTED, low_power_status, (uint8_t) 39, (uint8_t) 41, (uint8_t) 40);
   sensor_ptrs[7] = new HRLV("DIS_", IS_ANALOG, IS_NOT_CONNECTED, low_power_status, (uint8_t) A3, (uint8_t) 5);
+  sensor_ptrs[8] = new thermo("th", IS_ANALOG, IS_CONNECTED, low_power_status, (uint8_t) A1, (uint8_t) 6);
   
   // for non connected sensors, indicate whether you want some fake data, for test purposes for instance
-  sensor_ptrs[3]->set_fake_data(true);
+  //sensor_ptrs[3]->set_fake_data(true);
   //sensor_ptrs[4]->set_fake_data(true); 
 
 //////////////////////////////////////////////////////////////////  
