@@ -27,16 +27,16 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // please uncomment only 1 choice
 //
-#define ETSI_EUROPE_REGULATION
-//#define FCC_US_REGULATION
+//#define ETSI_EUROPE_REGULATION
+#define FCC_US_REGULATION
 //#define SENEGAL_REGULATION
 /////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
 // IMPORTANT
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // please uncomment only 1 choice
-#define BAND868
-//#define BAND900
+//#define BAND868
+#define BAND900
 //#define BAND433
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -60,7 +60,7 @@ const uint32_t DEFAULT_CHANNEL=CH_04_868;
 const uint32_t DEFAULT_CHANNEL=CH_10_868;
 #endif
 #elif defined BAND900
-const uint32_t DEFAULT_CHANNEL=CH_05_900;
+const uint32_t DEFAULT_CHANNEL=CH_12_900;
 #elif defined BAND433
 const uint32_t DEFAULT_CHANNEL=CH_00_433;
 #endif
@@ -100,9 +100,9 @@ const uint32_t DEFAULT_CHANNEL=CH_00_433;
 
 ///////////////////////////////////////////////////////////////////
 // CHANGE HERE THE READ PIN AND THE POWER PIN FOR THE TEMP. SENSOR
-#define TEMP_PIN_READ  A0
+#define TEMP_PIN_READ  A1
 // use digital 8 to power the temperature sensor if needed
-#define TEMP_PIN_POWER 8
+#define TEMP_PIN_POWER 6
 ///////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////
@@ -359,13 +359,16 @@ void loop(void)
 
       temp = 0;
       int value;
-      
+      int beta = 3950;
+      long a = 0;
+
       for (int i=0; i<10; i++) {
           // change here how the temperature should be computed depending on your sensor type
           // 
-           value = analogRead(TEMP_PIN_READ);
-          temp += (value*TEMP_SCALE/1024.0)/10;
-        
+          value = analogRead(TEMP_PIN_READ);
+          a = 1023 - value;
+          temp += beta/(log((1025.*10/a-10)/10)+beta/298.0)-273.0;
+          
           PRINT_CSTSTR("%s","Reading ");
           PRINT_VALUE("%d", value);
           PRINTLN;   
@@ -375,7 +378,8 @@ void loop(void)
 #ifdef LOW_POWER
       digitalWrite(TEMP_PIN_POWER,LOW);
 #endif
-
+      temp = temp/10;
+  
       PRINT_CSTSTR("%s","Mean temp is ");
       temp = temp/10;
       PRINT_VALUE("%f", temp);
