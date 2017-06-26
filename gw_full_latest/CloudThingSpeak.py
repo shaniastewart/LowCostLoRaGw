@@ -290,6 +290,8 @@ def main(ldata, pdata, rdata, tdata, gwid):
 	SNR=arr[5]
 	RSSI=arr[6]
 
+	ldata = ldata + '/RSSI/' + str(RSSI) + '/SNR/' + str(SNR)
+	
 	if (str(src) in key_ThingSpeak.source_list) or (len(key_ThingSpeak.source_list)==0):
 	
 		#this part depends on the syntax used by the end-device
