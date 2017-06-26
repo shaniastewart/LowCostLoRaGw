@@ -89,12 +89,12 @@ const uint32_t DEFAULT_CHANNEL=CH_00_433;
 #define NEW_DATA_FIELD
 #define LOW_POWER
 #define LOW_POWER_HIBERNATE
-#define WITH_AES
+//#define WITH_AES
 //#define LORAWAN
 //#define TO_LORAWAN_GW
 //#define WITH_ACK
 //this will enable a receive window after every transmission
-#define WITH_RCVW
+//#define WITH_RCVW
 ///////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////
