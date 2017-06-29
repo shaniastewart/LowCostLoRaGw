@@ -39,6 +39,7 @@
 #include "HRLV.h"
 
 #include "thermo.h"
+#include "photoresistor.h"
 
 // IMPORTANT
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,7 +244,7 @@ long getCmdValue(int &i, char* strBuff=NULL) {
 // SENSORS DEFINITION 
 //////////////////////////////////////////////////////////////////
 // CHANGE HERE THE NUMBER OF SENSORS, SOME CAN BE NOT CONNECTED
-const int number_of_sensors = 9;
+const int number_of_sensors = 10;
 //////////////////////////////////////////////////////////////////
 
 // array containing sensors pointers
@@ -291,6 +292,7 @@ void setup()
   sensor_ptrs[6] = new HCSR04("DIS", IS_NOT_ANALOG, IS_NOT_CONNECTED, low_power_status, (uint8_t) 39, (uint8_t) 41, (uint8_t) 40);
   sensor_ptrs[7] = new HRLV("DIS_", IS_ANALOG, IS_NOT_CONNECTED, low_power_status, (uint8_t) A3, (uint8_t) 5);
   sensor_ptrs[8] = new thermo("th", IS_ANALOG, IS_CONNECTED, low_power_status, (uint8_t) A1, (uint8_t) 6);
+  sensor_ptrs[9] = new photoresistor("res", IS_ANALOG, IS_CONNECTED, low_power_status, (uint8_t) A3, (uint8_t) 9);
   
   // for non connected sensors, indicate whether you want some fake data, for test purposes for instance
   //sensor_ptrs[3]->set_fake_data(true);
