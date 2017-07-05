@@ -452,6 +452,8 @@ void setup()
   delay(500);
 }
 
+#define field_index 4
+
 void loop(void)
 {
   long startSend;
@@ -472,20 +474,24 @@ void loop(void)
 
       uint8_t r_size;
     
-      char final_str[80] = "\\!";
+      //char final_str[80] = "\\!";
+      char final_str[80] = "";
       char aux[6] = "";
+      int count = 0;
 
       // main loop for sensors, actually, you don't have to edit anything here
       // just add a predefined sensor if needed or provide a new sensor class instance for a handle a new physical sensor
+    
       for (int i=0; i<number_of_sensors; i++) {
 
           if (sensor_ptrs[i]->get_is_connected() || sensor_ptrs[i]->has_fake_data()) {
             
               ftoa(aux, sensor_ptrs[i]->get_value(), 2);
+              count += 1;
           
-              if (i==0) {
+              if (count==1) {
                   //sprintf(final_str, "%s%s/%s", final_str, nomenclatures_array[i], aux);
-                  sprintf(final_str, "%s%s/%s", final_str, sensor_ptrs[i]->get_nomenclature(), aux);
+                  sprintf(final_str, "%s/%s", sensor_ptrs[i]->get_nomenclature(), aux);
                   
               } 
               else {
@@ -496,7 +502,7 @@ void loop(void)
           //  strcpy(aux,"");
       }
       
-      r_size=sprintf((char*)message+app_key_offset, final_str);
+      r_size=sprintf((char*)message+app_key_offset, "\\!#%d#%s", field_index, final_str);
 
       PRINT_CSTSTR("%s","Sending ");
       PRINT_STR("%s",(char*)(message+app_key_offset));
