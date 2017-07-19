@@ -1048,15 +1048,21 @@ void loop(void)
 #if not defined ARDUINO && not defined GW_RELAY
          char time_buffer[30];
          int millisec;
+	 int microsec;
          struct tm* tm_info;
          struct timeval tv;
         
          gettimeofday(&tv, NULL);
         
          millisec = lrint(tv.tv_usec/1000.0); // Round to nearest millisec
+	 microsec = tv.tv_usec;
          
-         if (millisec>=1000) { // Allow for rounding up to nearest second
-            millisec -=1000;
+         //if (millisec>=1000) { // Allow for rounding up to nearest second
+           // millisec -=1000;
+           // tv.tv_sec++;
+         //}
+	 if (microsec>=1000000) { // Allow for rounding up to nearest second
+            microsec -=1000000;
             tv.tv_sec++;
          }
         
@@ -1114,7 +1120,7 @@ void loop(void)
 
 #if not defined ARDUINO && not defined GW_RELAY        
          strftime(time_buffer, 30, "%Y-%m-%dT%H:%M:%S", tm_info);
-         sprintf(cmd, "^t%s.%03d\n", time_buffer, millisec);
+         sprintf(cmd, "^t%s.%06d\n", time_buffer, microsec);
          PRINT_STR("%s", cmd);
 #endif
             
@@ -1488,6 +1494,7 @@ void loop(void)
     	
     		char time_buffer[30];
     		int millisec;
+	    	int microsec;
     		struct tm* tm_info;
     		struct timeval tv;
     		
@@ -1583,17 +1590,23 @@ void loop(void)
     						
     						// Round to nearest millisec
     						millisec = lrint(tv.tv_usec/1000.0); 
+						microsec = tv.tv_usec;
     						
     						// Allow for rounding up to nearest second
-    						if (millisec>=1000) { 
-    							millisec -=1000;
-    							tv.tv_sec++;
-    						}
+    						//if (millisec>=1000) { 
+    							//millisec -=1000;
+    							//tv.tv_sec++;
+    						//}
+						 if (microsec>=1000000) { // Allow for rounding up to nearest second
+            						microsec -=1000000;
+           						tv.tv_sec++;
+         					}
+
     						
     						tm_info = localtime(&tv.tv_sec);
     						strftime(time_buffer, 30, "%Y-%m-%dT%H:%M:%S", tm_info);
     						
-    						fprintf(fp, "%s.%03d %s\n", time_buffer, millisec, json_record_buffer.GetString());
+    						fprintf(fp, "%s.%06d %s\n", time_buffer, microsec, json_record_buffer.GetString());
     						
     						fclose(fp);
     					}
@@ -1647,6 +1660,7 @@ void loop(void)
     				
     				char time_buffer[30];
     				int millisec;
+				int microsec;
     				struct tm* tm_info;
     				struct timeval tv;
     						
@@ -1679,17 +1693,22 @@ void loop(void)
     					
     					// Round to nearest millisec
     					millisec = lrint(tv.tv_usec/1000.0); 
+					microsec = tv.tv_usec;
     					
     					// Allow for rounding up to nearest second
-    					if (millisec>=1000) { 
-    						millisec -=1000;
+    					//if (millisec>=1000) { 
+    						//millisec -=1000;
+    						//tv.tv_sec++;
+    					//}
+					if (microsec>=1000000) { 
+    						microsec -=1000000;
     						tv.tv_sec++;
     					}
     					
     					tm_info = localtime(&tv.tv_sec);
     					strftime(time_buffer, 30, "%Y-%m-%dT%H:%M:%S", tm_info);
     					
-    					fprintf(fp, "%s.%03d %s\n", time_buffer, millisec, json_record_buffer.GetString());
+    					fprintf(fp, "%s.%06d %s\n", time_buffer, microsec, json_record_buffer.GetString());
     					
     					fclose(fp);
     				}
