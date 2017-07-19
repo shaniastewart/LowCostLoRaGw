@@ -182,7 +182,6 @@ RTCZero rtc;
 unsigned int nCycle = idlePeriodInMin*60/LOW_POWER_PERIOD;
 #endif
 
-double temp;
 unsigned long nextTransmissionTime=0L;
 char float_str[20];
 uint8_t message[100];
@@ -357,7 +356,7 @@ void loop(void)
       delay(200);   
 #endif
 
-      temp = 0;
+      double temp = 0;
       int value;
       int beta = 3950;
       long a = 0;
@@ -369,9 +368,9 @@ void loop(void)
           a = 1023 - value;
           temp += beta/(log((1025.*10/a-10)/10)+beta/298.0)-273.0;
           
-          PRINT_CSTSTR("%s","Reading ");
-          PRINT_VALUE("%d", value);
-          PRINTLN;   
+          //PRINT_CSTSTR("%s","Reading ");
+          //PRINT_VALUE("%d", value);
+          //PRINTLN;   
           delay(100);
       }
       
