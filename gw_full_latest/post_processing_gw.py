@@ -875,6 +875,7 @@ while True:
 			elif (ch=='!'): 
 
 				ldata = getAllLine()
+				data = str(ldata) + ' ' + str(pdata) + ' ' + str(tdata)
 				
 				print "number of enabled clouds is %d" % len(_enabled_clouds)	
 				
@@ -899,6 +900,13 @@ while True:
 							print "Error when uploading data to the cloud"	
 
 				print "--> cloud end"
+				print "\n"
+				print "rcv msg to log (\$) in log file: "+data,
+				f=open(os.path.expanduser(_telemetrylog_filename),"a")
+				f.write(info_str+' ')	
+				f.write(now.isoformat()+'> ')
+				f.write(data)
+				f.close()
 				
 			#END
 			#////////////////////////////////////////////////////////////				
